@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <div class="wrapper">
+    <router-view />
+  </div>
 </template>
 
 <style lang="scss">
@@ -13,6 +15,14 @@ body {
   color: #ffffff;
   font-family: "PT Sans", sans-serif;
   text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: #{"min(700px, 100%)"};
+  margin: auto;
 }
 
 h1,
