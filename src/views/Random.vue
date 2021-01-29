@@ -1,22 +1,28 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import RandomBeer from "../components/RandomBeer.vue";
+import SuspenseWithError from "../components/SuspenseWithError.vue";
+import Loader from "../components/Loader.vue";
+import Error from "../components/Error.vue";
 
 export default defineComponent({
   name: "Random",
-  components: { RandomBeer },
+  components: { RandomBeer, SuspenseWithError, Loader, Error },
 });
 </script>
 
 <template>
-  <Suspense>
+  <SuspenseWithError>
     <template #default>
       <RandomBeer />
     </template>
     <template #fallback>
-      <h1>Loading... Please wait.</h1>
+      <Loader text="Pouring, please wait..." />
     </template>
-  </Suspense>
+    <template #error>
+      <Error />
+    </template>
+  </SuspenseWithError>
 </template>
 
 <style lang="scss" scoped>

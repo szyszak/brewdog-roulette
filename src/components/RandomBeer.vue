@@ -1,117 +1,105 @@
 <script lang="ts">
-import { defineComponent } from "vue";
-import IconLink from "./IconLink.vue";
+import { defineComponent, ref } from "vue";
+import IconButton from "./IconButton.vue";
 import { fetchRandomBeer } from "../requests/fetchRandomBeer";
 
 export default defineComponent({
   name: "RandomBeer",
-  components: { IconLink },
+  components: { IconButton },
   async setup() {
-    const {
-      name,
-      imageUrl,
-      tagline,
-      description,
-      abv,
-      ibu,
-      malts,
-      hops,
-      foodPairing,
-      tipText,
-      tipAuthor,
-    } = await fetchRandomBeer();
+    const data = ref(await fetchRandomBeer());
 
-    console.log({
-      name,
-      imageUrl,
-      tagline,
-      description,
-      abv,
-      ibu,
-      malts,
-      hops,
-      foodPairing,
-      tipText,
-      tipAuthor,
-    });
+    const refetch = async () => {
+      data.value = await ref(fetchRandomBeer()).value;
+      window.scrollTo({ top: 0 });
+    };
 
     return {
-      name,
-      imageUrl,
-      tagline,
-      description,
-      abv,
-      ibu,
-      malts,
-      hops,
-      foodPairing,
-      tipText,
-      tipAuthor,
+      data,
+      refetch,
     };
   },
 });
 </script>
 
 <template>
-  <h1 class="main-header">{{ name }}</h1>
+  <h1 class="main-header">{{ data.name }}</h1>
 
-  <img class="beer-image" v-if="imageUrl !== null" :src="imageUrl" alt="" />
-  <p v-else>MISSING IMAGE</p>
+  <img class="beer-image" v-if="data.imageUrl" :src="data.imageUrl" alt="" />
+  <div class="missing" v-else>
+    <img class="missing__image" src="../assets/missing.jpg" alt="" />
+    <p class="missing__text">IMAGE NOT AVAILABLE</p>
+  </div>
 
-  <p class="tagline">"{{ tagline }}"</p>
+  <p class="tagline">"{{ data.tagline }}"</p>
 
   <h2 class="description-header">Description:</h2>
 
-  <p class="description">{{ description }}</p>
+  <p class="description">{{ data.description }}</p>
 
   <div class="wrapper">
     <p class="abbreviation">
-      <abbr class="abbreviation__title" title="Alcohol by volume.">ABV: </abbr>
-      <span class="abbreviation__text"> {{ abv }}%</span>
+      <abbr class="abbreviation__title" title="Alcohol by volume.">ABV</abbr>
+      <span class="abbreviation__text">: {{ data.abv }}%</span>
     </p>
 
     <p class="abbreviation">
-      <abbr class="abbreviation__title" title="International bittering unit.">IBU: </abbr>
-      <span class="abbreviation__text">{{ ibu }}</span>
+      <abbr class="abbreviation__title" title="International bittering unit.">IBU</abbr>
+      <span class="abbreviation__text">: {{ data.ibu }}</span>
     </p>
   </div>
 
   <h3 class="label"><img class="label__icon" src="../assets/malt.png" alt="" />Malts:</h3>
 
   <p class="list">
-    {{ malts.join(", ") }}
+    {{ data.malts.join(", ") }}
   </p>
 
   <h3 class="label"><img class="label__icon" src="../assets/hop.png" alt="" />Hops:</h3>
 
   <p class="list">
-    {{ hops.join(", ") }}
+    {{ data.hops.join(", ") }}
   </p>
 
   <h3 class="label"><img class="label__icon" src="../assets/pizza.png" alt="" />Food pairing:</h3>
 
   <ol class="food-list">
-    <li class="food-list__item" v-for="item of foodPairing" :key="item">{{ item }}</li>
+    <li class="food-list__item" v-for="item of data.foodPairing" :key="item">{{ item }}</li>
   </ol>
 
   <div class="brewers-tip">
     <h3 class="brewers-tip__header">Brewers tip:</h3>
 
-    <p class="brewers-tip__text">{{ tipText }}</p>
+    <p class="brewers-tip__text">"{{ data.tipText }}"</p>
 
-    <p class="brewers-tip__author">{{ tipAuthor }}</p>
+    <p class="brewers-tip__author">- {{ data.tipAuthor }}</p>
   </div>
 
-  <IconLink text="ROLL AGAIN" location="/random" />
+  <IconButton text="ROLL AGAIN" @click="refetch" />
 </template>
 
 <style lang="scss" scoped>
 .main-header {
+  margin-bottom: 40px;
+  font-size: 44px;
 }
 
 .beer-image {
+  display: block;
   width: 140px;
   height: auto;
+}
+
+.missing {
+  &__image {
+    display: block;
+    width: #{"min(320px, 100%)"};
+    height: auto;
+    margin: auto;
+  }
+
+  /* &__text {
+  } */
 }
 
 .tagline {
@@ -119,11 +107,11 @@ export default defineComponent({
   font-style: italic;
 }
 
-.description-header {
-}
+/* .description-header {
+} */
 
-.description {
-}
+/* .description {
+} */
 
 .wrapper {
   display: flex;
@@ -132,14 +120,13 @@ export default defineComponent({
   width: #{"min(320px, 100%)"};
 }
 
-.abbreviation {
+/* .abbreviation {
   &__title {
   }
 
   &__text {
-    margin-left: 10px;
   }
-}
+} */
 
 .label {
   display: flex;
@@ -184,10 +171,10 @@ export default defineComponent({
   }
 
   &__text {
-  }
-
-  &__author {
     font-style: italic;
   }
+
+  /* &__author {
+  } */
 }
 </style>

@@ -1,24 +1,13 @@
-# brewdog-roulette
+# Brewdog Roulette
 
-## Project setup
-```
-npm install
-```
+Vue 3 app showing random beer from Brewdog brewery catalogue.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Tech used:
 
-### Compiles and minifies for production
-```
-npm run build
-```
+- Vue 3
+- Vue Router
+- [Punk API](https://punkapi.com/)
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Live demo:
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[https://szyszak.github.io/brewdog-roulette/](https://szyszak.github.io/brewdog-roulette)
